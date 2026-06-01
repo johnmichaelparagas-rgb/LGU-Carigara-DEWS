@@ -2,6 +2,11 @@ from django.contrib import admin
 
 from .models import AuditLog, Incident, Reading, Sensor, Warning
 
+# Brand the admin to match the public site (Leyte DEWS / MDRRMO).
+admin.site.site_header = 'Leyte DEWS Administration'
+admin.site.site_title = 'Leyte DEWS'
+admin.site.index_title = 'MDRRMO Control Panel'
+
 
 class ReadingInline(admin.TabularInline):
     model = Reading
