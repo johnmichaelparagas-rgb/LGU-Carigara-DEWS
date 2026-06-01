@@ -1,0 +1,5 @@
+# Normalize line endings. Shell scripts must stay LF so the shebang works on
+# the Linux build host (Render); CRLF would break `#!/usr/bin/env bash`.
+* text=auto
+*.sh text eol=lf
+build.sh text eol=lf
