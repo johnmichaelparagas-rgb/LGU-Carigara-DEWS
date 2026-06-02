@@ -163,8 +163,16 @@ a { color: inherit; text-decoration: none; }
 }
 .feature:hover { transform: translateY(-3px); border-color: var(--brand); }
 .feature-icon {
-  width: 48px; height: 48px; border-radius: 12px; display: grid; place-items: center;
-  font-size: 24px; background: var(--panel-2); margin-bottom: 16px;
+  width: 50px; height: 50px; border-radius: 13px; display: grid; place-items: center;
+  margin-bottom: 16px; color: var(--brand);
+  background: linear-gradient(135deg, rgba(14,165,233,.16), rgba(2,132,199,.06));
+  border: 1px solid rgba(14,165,233,.25);
+  transition: color .15s ease, border-color .15s ease, background .15s ease;
+}
+.feature-icon .feat-ico { width: 25px; height: 25px; }
+.feature:hover .feature-icon {
+  color: #7dd3fc; border-color: var(--brand);
+  background: linear-gradient(135deg, rgba(14,165,233,.26), rgba(2,132,199,.1));
 }
 .feature h3 { font-size: 18px; margin-bottom: 8px; }
 .feature p { color: var(--muted); font-size: 14.5px; }
