@@ -13,7 +13,7 @@
     <div id="login-view" class="login-view">
       <form id="login-form" class="login-card" autocomplete="on">
         <div class="brand">
-          <div class="brand-mark">⛑</div>
+          <div class="brand-mark"><svg class="mark-ico" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 16 L51 47 H13 Z" fill="none" stroke="#fff" stroke-width="5" stroke-linejoin="round"/><rect x="29.5" y="28" width="5" height="11" rx="2.5" fill="#fff"/><circle cx="32" cy="44" r="2.8" fill="#fff"/></svg></div>
           <div>
             <h1>Leyte DEWS</h1>
             <p>Disaster Early Warning System — MDRRMO Portal</p>
@@ -32,7 +32,7 @@
     <div id="app-view" hidden>
       <header class="topbar">
         <div class="topbar-brand">
-          <span class="brand-mark sm">⛑</span>
+          <span class="brand-mark sm"><svg class="mark-ico" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 16 L51 47 H13 Z" fill="none" stroke="#fff" stroke-width="5" stroke-linejoin="round"/><rect x="29.5" y="28" width="5" height="11" rx="2.5" fill="#fff"/><circle cx="32" cy="44" r="2.8" fill="#fff"/></svg></span>
           <strong>Leyte DEWS</strong>
           <span class="muted">MDRRMO Portal</span>
         </div>
@@ -52,6 +52,11 @@
         <!-- Overview -->
         <section id="tab-overview" class="tab-panel active">
           <div class="stat-grid" id="stat-grid"></div>
+          <div class="card">
+            <h2>Sensor status distribution</h2>
+            <div id="hazard-bar" class="hazard-bar"></div>
+            <div id="hazard-legend" class="hazard-legend"></div>
+          </div>
           <div class="card">
             <h2>Highest current hazard by municipality</h2>
             <div id="muni-status" class="muni-grid"></div>

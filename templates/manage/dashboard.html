@@ -40,7 +40,13 @@
           {% if can_edit %}Edit{% else %}View{% endif %}</a></td>
       </tr>
       {% empty %}
-      <tr><td colspan="8" class="muted">No incidents match the current filters.</td></tr>
+      <tr><td colspan="8">
+        <div class="empty-state">
+          <div class="empty-ico">🗂️</div>
+          <div><strong>No incidents found</strong>
+            <p class="muted">Nothing matches the current filters. Try adjusting or resetting them.</p></div>
+        </div>
+      </td></tr>
       {% endfor %}
     </tbody>
   </table>

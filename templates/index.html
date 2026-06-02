@@ -16,7 +16,7 @@
     <header class="nav">
       <div class="nav-inner">
         <a class="nav-brand" href="#top">
-          <span class="brand-mark">⛑</span>
+          <span class="brand-mark"><svg class="mark-ico" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 16 L51 47 H13 Z" fill="none" stroke="#fff" stroke-width="5" stroke-linejoin="round"/><rect x="29.5" y="28" width="5" height="11" rx="2.5" fill="#fff"/><circle cx="32" cy="44" r="2.8" fill="#fff"/></svg></span>
           <span class="nav-brand-text">
             <strong>Leyte DEWS</strong>
             <small>Disaster Early Warning System</small>
@@ -216,7 +216,7 @@
     <footer class="footer">
       <div class="footer-inner">
         <div class="footer-brand">
-          <span class="brand-mark sm">⛑</span>
+          <span class="brand-mark sm"><svg class="mark-ico" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 16 L51 47 H13 Z" fill="none" stroke="#fff" stroke-width="5" stroke-linejoin="round"/><rect x="29.5" y="28" width="5" height="11" rx="2.5" fill="#fff"/><circle cx="32" cy="44" r="2.8" fill="#fff"/></svg></span>
           <div>
             <strong>Leyte DEWS</strong>
             <p class="muted">Municipal Disaster Risk Reduction &amp; Management Office</p>
@@ -319,6 +319,25 @@
       loadSituation();
       // Refresh the live snapshot every 60s while the page is open.
       setInterval(loadSituation, 60000);
-    </script>
+
+      // Scroll-reveal: gracefully fade sections in as they enter the viewport.
+      // Progressive enhancement — skipped if reduced motion is preferred or
+      // IntersectionObserver is unavailable, leaving all content visible.
+      (function scrollReveal() {
+        const motionOK = window.matchMedia('(prefers-reduced-motion: no-preference)').matches;
+        if (!motionOK || !('IntersectionObserver' in window)) return;
+        document.body.classList.add('reveal-on');
+        const targets = document.querySelectorAll(
+          '.section-head, .feature, .step, .role-card, .status-panel, .cta-inner'
+        );
+        targets.forEach((t) => t.setAttribute('data-reveal', ''));
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) { e.target.classList.add('is-visible'); io.unobserve(e.target); }
+          });
+        }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+        targets.forEach((t) => io.observe(t));
+      })();
+</script>
   </body>
 </html>

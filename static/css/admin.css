@@ -85,6 +85,7 @@ body { background: var(--body-bg); color: var(--body-fg); }
   background: linear-gradient(135deg, #0ea5e9, #0284c7);
   box-shadow: 0 4px 14px rgba(14, 165, 233, .4);
 }
+.dews-mark .mark-ico { width: 58%; height: 58%; display: block; }
 .dews-brand-text { display: flex; flex-direction: column; line-height: 1.15; }
 .dews-brand-text strong { font-size: 17px; color: #ffffff; font-weight: 700; }
 .dews-brand-text small { font-size: 11px; color: #94a3b8; }

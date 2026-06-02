@@ -133,6 +133,8 @@ async function loadOverview() {
       grid.append(el('div', { class: `stat ${s.alert ? 'alert' : ''}` }, [
         el('div', { class: 'num' }, String(s.num)), el('div', { class: 'lbl' }, s.lbl)]));
     }
+    renderHazardBar();
+
     const byMuni = {};
     for (const s of state.sensors) {
       const cur = byMuni[s.municipality] || 'normal';
@@ -143,6 +145,31 @@ async function loadOverview() {
       .forEach(([m, st]) => wrap.append(el('div', { class: 'muni-chip' }, [
         el('span', {}, m), el('span', { class: `badge ${st}` }, titleCase(st))])));
   } catch (err) { toast(err.message, 'err'); }
+}
+
+// Stacked bar of how many sensors sit at each hazard status level.
+function renderHazardBar() {
+  const bar = $('#hazard-bar'); const legend = $('#hazard-legend');
+  if (!bar) return;
+  bar.innerHTML = ''; legend.innerHTML = '';
+  const total = state.sensors.length;
+  if (!total) {
+    bar.append(el('div', { class: 'hazard-empty muted' }, 'No sensors to chart yet.'));
+    return;
+  }
+  const counts = Object.fromEntries(HAZARD_STATUS.map((s) => [s, 0]));
+  for (const s of state.sensors) counts[s.status] = (counts[s.status] || 0) + 1;
+  for (const status of HAZARD_STATUS) {
+    const n = counts[status];
+    if (!n) continue;
+    const pct = (n / total) * 100;
+    const seg = el('div', { class: `hazard-seg ${status}`, title: `${titleCase(status)}: ${n}` });
+    seg.style.width = `${pct}%`;
+    if (pct >= 8) seg.textContent = n;
+    bar.append(seg);
+    legend.append(el('span', { class: 'hazard-key' }, [
+      el('span', { class: `hazard-dot ${status}` }), `${titleCase(status)} (${n})`]));
+  }
 }
 
 // ---- Sensors --------------------------------------------------------------
@@ -238,7 +265,10 @@ async function loadIncidents() {
         el('td', { class: 'muted' }, fmtTime(i.reported_at)),
       ]));
     }
-    if (!incidents.length) tbody.append(el('tr', {}, el('td', { colspan: '5', class: 'muted' }, 'No incidents logged.')));
+    if (!incidents.length) tbody.append(el('tr', {}, el('td', { colspan: '5' }, [
+      el('div', { class: 'empty-state' }, [
+        el('div', { class: 'empty-ico' }, '🗂️'),
+        el('div', { class: 'empty-text' }, 'No incidents logged yet.')])])));
   } catch (err) { toast(err.message, 'err'); }
 }
 
@@ -295,7 +325,9 @@ async function loadWarnings() {
         ]),
       ]));
     }
-    if (!warnings.length) list.append(el('p', { class: 'muted' }, 'No warnings issued.'));
+    if (!warnings.length) list.append(el('div', { class: 'empty-state' }, [
+      el('div', { class: 'empty-ico' }, '🔔'),
+      el('div', { class: 'empty-text' }, 'No early warnings issued.')]));
   } catch (err) { toast(err.message, 'err'); }
 }
 

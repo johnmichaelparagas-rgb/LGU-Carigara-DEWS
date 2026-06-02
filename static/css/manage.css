@@ -40,6 +40,7 @@ input:focus, select:focus, textarea:focus {
   font-size: 17px; background: linear-gradient(135deg, var(--brand), var(--brand-2));
   box-shadow: 0 4px 12px rgba(14,165,233,.35);
 }
+.mark-ico { width: 58%; height: 58%; display: block; }
 .topbar nav { display: flex; gap: 6px; margin-left: 14px; }
 .topbar nav a { color: var(--muted); padding: 7px 12px; border-radius: 8px; font-weight: 500; }
 .topbar nav a:hover { color: var(--text); background: var(--panel-2); }
@@ -140,3 +141,11 @@ input:focus, select:focus, textarea:focus {
 .thumb { width: 90px; height: 90px; object-fit: cover; border-radius: 9px; border: 1px solid var(--line); }
 .thumb.placeholder { display: grid; place-items: center; color: var(--muted); font-size: 11px; background: var(--bg); }
 .thumb-strip { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+
+/* Empty state */
+.empty-state { display: flex; flex-direction: column; align-items: center; gap: 8px;
+  padding: 36px 16px; text-align: center; }
+.empty-state .empty-ico { width: 56px; height: 56px; border-radius: 15px; display: grid; place-items: center;
+  font-size: 27px; background: var(--panel-2); border: 1px solid var(--line); margin-bottom: 4px; }
+.empty-state strong { font-size: 15px; }
+.empty-state p { margin: 4px 0 0; font-size: 13px; }
