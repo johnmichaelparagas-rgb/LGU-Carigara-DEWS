@@ -1,14 +1,17 @@
 import django_filters
 from django import forms
 
-from .models import Incident, MUNICIPALITY_CHOICES
+from .models import BARANGAY_CHOICES, Incident
 
 
 class IncidentFilter(django_filters.FilterSet):
     """Composable querystring filters for the incident dashboard.
 
-    Supports combined date-range + status (+ municipality/type) filtering, e.g.
-        ?start=2026-05-01&end=2026-05-31&status=in_progress&municipality=Palo
+    Supports combined date-range + status (+ barangay/type) filtering, e.g.
+        ?start=2026-05-01&end=2026-05-31&status=in_progress&municipality=Sawang
+
+    The ``municipality`` querystring key is retained for API compatibility but
+    now filters on a Carigara barangay.
     """
     start = django_filters.DateFilter(
         field_name='reported_at', lookup_expr='date__gte',
@@ -22,7 +25,7 @@ class IncidentFilter(django_filters.FilterSet):
         choices=Incident.Status.choices, empty_label='All statuses',
     )
     municipality = django_filters.ChoiceFilter(
-        choices=MUNICIPALITY_CHOICES, empty_label='All municipalities',
+        label='Barangay', choices=BARANGAY_CHOICES, empty_label='All barangays',
     )
     type = django_filters.ChoiceFilter(
         choices=Incident.Type.choices, empty_label='All types',

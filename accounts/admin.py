@@ -8,10 +8,10 @@ class CustomUserAdmin(UserAdmin):
     list_display = ('username', 'name_display', 'role', 'municipality', 'is_active')
     list_filter = ('role', 'municipality', 'is_active')
     fieldsets = UserAdmin.fieldsets + (
-        ('MDRRMO profile', {'fields': ('role', 'municipality')}),
+        ('MDRRMO Carigara profile', {'fields': ('role', 'municipality')}),
     )
     add_fieldsets = UserAdmin.add_fieldsets + (
-        ('MDRRMO profile', {'fields': ('role', 'municipality')}),
+        ('MDRRMO Carigara profile', {'fields': ('role', 'municipality')}),
     )
 
     @admin.display(description='Name')

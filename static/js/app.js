@@ -1,11 +1,13 @@
-// Leyte DEWS dashboard — vanilla JS SPA talking to the Django REST API.
+// Carigara DEWS dashboard — vanilla JS SPA talking to the Django REST API.
 'use strict';
 
 const HAZARD_TYPES = ['flood', 'rainfall', 'river_level', 'landslide', 'storm_surge', 'seismic'];
 const HAZARD_STATUS = ['normal', 'advisory', 'watch', 'warning', 'critical'];
 const INCIDENT_TYPES = ['flooding', 'landslide', 'road_blockage', 'structural_damage', 'casualty', 'evacuation', 'power_outage', 'other'];
 const INCIDENT_STATUS = ['reported', 'in_progress', 'resolved', 'closed'];
-const MUNICIPALITIES = ['Tacloban City', 'Palo', 'Tanauan', 'Tolosa', 'Dulag', 'Abuyog', 'Baybay City', 'Ormoc City', 'Carigara', 'Barugo', 'Jaro', 'Pastrana', 'Alangalang', 'Santa Fe', 'Tabontabon', 'MacArthur'];
+// Carigara, Leyte barangays. The API still names this field "municipality"
+// (legacy contract); here it carries the barangay the portal operates over.
+const BARANGAYS = ['Bagong Lipunan', 'Balilit', 'Barayong', 'Barugohay Central', 'Barugohay Norte', 'Barugohay Sur', 'Baybay', 'Binibihan', 'Bislig', 'Caghalo', 'Camansi', 'Canal', 'Candigahub', 'Canfabi', 'Canlampay', 'Cogon', 'Cutay', 'East Visoria', 'Guindapunan East', 'Guindapunan West', 'Hiluctogan', 'Jugaban', 'Libo', 'Lower Hiraan', 'Lower Sogod', 'Macalpi', 'Manloy', 'Nauguisan', 'Paglaum', 'Pangna', 'Parag-um', 'Parina', 'Piloro', 'Ponong', 'Rizal', 'Sagkahan', 'San Isidro', 'San Juan', 'San Mateo', 'Santa Fe', 'Sawang', 'Tagak', 'Tangnan', 'Tigbao', 'Tinaguban', 'Upper Hiraan', 'Upper Sogod', 'Uyawan', 'West Visoria'];
 
 const state = { token: null, user: null, sensors: [], selected: new Set() };
 
@@ -96,13 +98,13 @@ function enterApp() {
 
 function populateSelects() {
   const opt = (v, label) => `<option value="${v}">${label || titleCase(v)}</option>`;
-  $('#sensor-filter-muni').innerHTML = `<option value="">All municipalities</option>` + MUNICIPALITIES.map((m) => opt(m, m)).join('');
+  $('#sensor-filter-muni').innerHTML = `<option value="">All barangays</option>` + BARANGAYS.map((m) => opt(m, m)).join('');
   $('#sensor-filter-hazard').innerHTML = `<option value="">All hazards</option>` + HAZARD_TYPES.map((h) => opt(h)).join('');
   $('#bulk-status').innerHTML = `<option value="">Set status to…</option>` + HAZARD_STATUS.map((s) => opt(s)).join('');
   $('#inc-type').innerHTML = INCIDENT_TYPES.map((t) => opt(t)).join('');
-  $('#inc-muni').innerHTML = MUNICIPALITIES.map((m) => opt(m, m)).join('');
+  $('#inc-muni').innerHTML = BARANGAYS.map((m) => opt(m, m)).join('');
   $('#wn-hazard').innerHTML = HAZARD_TYPES.map((h) => opt(h)).join('');
-  $('#wn-munis').innerHTML = MUNICIPALITIES.map((m) => opt(m, m)).join('');
+  $('#wn-munis').innerHTML = BARANGAYS.map((m) => opt(m, m)).join('');
 }
 
 // ---- Tabs -----------------------------------------------------------------
@@ -135,13 +137,14 @@ async function loadOverview() {
     }
     renderHazardBar();
 
-    const byMuni = {};
+    // Roll up the highest hazard status per barangay (the `municipality` field).
+    const byBrgy = {};
     for (const s of state.sensors) {
-      const cur = byMuni[s.municipality] || 'normal';
-      byMuni[s.municipality] = HAZARD_STATUS.indexOf(s.status) > HAZARD_STATUS.indexOf(cur) ? s.status : cur;
+      const cur = byBrgy[s.municipality] || 'normal';
+      byBrgy[s.municipality] = HAZARD_STATUS.indexOf(s.status) > HAZARD_STATUS.indexOf(cur) ? s.status : cur;
     }
     const wrap = $('#muni-status'); wrap.innerHTML = '';
-    Object.entries(byMuni).sort((a, b) => HAZARD_STATUS.indexOf(b[1]) - HAZARD_STATUS.indexOf(a[1]))
+    Object.entries(byBrgy).sort((a, b) => HAZARD_STATUS.indexOf(b[1]) - HAZARD_STATUS.indexOf(a[1]))
       .forEach(([m, st]) => wrap.append(el('div', { class: 'muni-chip' }, [
         el('span', {}, m), el('span', { class: `badge ${st}` }, titleCase(st))])));
   } catch (err) { toast(err.message, 'err'); }
@@ -241,7 +244,7 @@ $('#bulk-apply-filter').addEventListener('click', async () => {
   if (!status) return toast('Choose a status first.', 'err');
   const municipality = $('#sensor-filter-muni').value || undefined;
   const hazard_type = $('#sensor-filter-hazard').value || undefined;
-  if (!municipality && !hazard_type) return toast('Set a municipality or hazard filter to bulk-apply.', 'err');
+  if (!municipality && !hazard_type) return toast('Set a barangay or hazard filter to bulk-apply.', 'err');
   if (!confirm(`Set ALL sensors matching the current filter to "${status}"?`)) return;
   try {
     const r = await api('/sensors/bulk-status/', { method: 'PATCH', body: { status, municipality, hazard_type } });

@@ -1,7 +1,8 @@
-# Leyte DEWS — LGU Incident Reporting & Hazard Management System
+# Carigara DEWS — LGU Incident Reporting & Hazard Management System
 
-A **Django + Django REST Framework** portal for **Municipal Disaster Risk Reduction &
-Management Offices (MDRRMO)** in Leyte. It combines:
+A **Django + Django REST Framework** portal for the **Municipal Disaster Risk Reduction &
+Management Office (MDRRMO)** of **Carigara, Leyte**. The portal operates at the
+**barangay** level across Carigara's 49 barangays. It combines:
 
 - A **server-rendered management UI** (Django session auth) for logging incidents with
   multiple hazard images via **inline formsets**, and a **django-filter** dashboard.
@@ -58,10 +59,11 @@ python manage.py runserver
 
 - [core/filters.py](core/filters.py) defines `IncidentFilter` (django-filter) with
   **date range** (`start`/`end` date pickers over `reported_at`) + **status** +
-  municipality + type — all composable via querystring.
+  barangay + type — all composable via querystring. (The `municipality` querystring
+  key is retained for API compatibility but now selects a Carigara barangay.)
 - `/manage/` renders the filter form and a **paginated** table (10/page), preserving active
   filters across pages, e.g.
-  `/manage/?start=2026-05-01&end=2026-05-31&status=in_progress&municipality=Palo`.
+  `/manage/?start=2026-05-01&end=2026-05-31&status=in_progress&municipality=Sawang`.
 - The same `IncidentFilter` powers the REST API via DRF's `DjangoFilterBackend`.
 
 ## 3. Security — strict RBAC + brute-force defense
@@ -150,7 +152,7 @@ media/              uploaded hazard images + thumbnails (dev)
    `PATCH .../{id}/` status → **200**.
 3. **Formset:** sign in as `admin`, open `/manage/incidents/new/`, attach 2+ images, submit →
    one incident with thumbnails.
-4. **Filtering:** `/manage/?status=in_progress&municipality=Pastrana` plus date range.
+4. **Filtering:** `/manage/?status=in_progress&municipality=Canlampay` plus date range.
 5. **Brute force:** POST `/login/` with wrong password ≥5× → **429** lockout page; reset with
    `python manage.py axes_reset`.
 

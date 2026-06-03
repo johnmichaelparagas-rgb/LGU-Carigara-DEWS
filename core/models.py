@@ -3,13 +3,25 @@ from django.db import models
 from django.utils import timezone
 
 
-# A representative set of Leyte (province) municipalities + nearby cities.
-MUNICIPALITIES = [
-    'Tacloban City', 'Palo', 'Tanauan', 'Tolosa', 'Dulag', 'Abuyog',
-    'Baybay City', 'Ormoc City', 'Carigara', 'Barugo', 'Jaro', 'Pastrana',
-    'Alangalang', 'Santa Fe', 'Tabontabon', 'MacArthur',
+# This portal serves a single municipality: Carigara, Leyte. The primary
+# location unit is therefore the *barangay*. Below is the official list of
+# Carigara's 49 barangays (source: PSA PSGC). The model field that selects one
+# of these is historically named ``municipality`` — it is kept under that name
+# to preserve the public API / data contract, but it now holds a barangay and
+# is labelled "Barangay" throughout the UI. The free-text ``barangay`` field is
+# repurposed as a finer "Sitio / Purok / Landmark" locator.
+BARANGAYS = [
+    'Bagong Lipunan', 'Balilit', 'Barayong', 'Barugohay Central',
+    'Barugohay Norte', 'Barugohay Sur', 'Baybay', 'Binibihan', 'Bislig',
+    'Caghalo', 'Camansi', 'Canal', 'Candigahub', 'Canfabi', 'Canlampay',
+    'Cogon', 'Cutay', 'East Visoria', 'Guindapunan East', 'Guindapunan West',
+    'Hiluctogan', 'Jugaban', 'Libo', 'Lower Hiraan', 'Lower Sogod', 'Macalpi',
+    'Manloy', 'Nauguisan', 'Paglaum', 'Pangna', 'Parag-um', 'Parina', 'Piloro',
+    'Ponong', 'Rizal', 'Sagkahan', 'San Isidro', 'San Juan', 'San Mateo',
+    'Santa Fe', 'Sawang', 'Tagak', 'Tangnan', 'Tigbao', 'Tinaguban',
+    'Upper Hiraan', 'Upper Sogod', 'Uyawan', 'West Visoria',
 ]
-MUNICIPALITY_CHOICES = [(m, m) for m in MUNICIPALITIES]
+BARANGAY_CHOICES = [(b, b) for b in BARANGAYS]
 
 
 class HazardStatus(models.TextChoices):
@@ -37,8 +49,13 @@ class Sensor(models.Model):
     device_id = models.CharField(max_length=64, unique=True)
     name = models.CharField(max_length=120)
     hazard_type = models.CharField(max_length=20, choices=HazardType.choices)
-    municipality = models.CharField(max_length=120, choices=MUNICIPALITY_CHOICES)
-    barangay = models.CharField(max_length=120, blank=True)
+    # Stored under the legacy name ``municipality`` but holds a Carigara barangay.
+    municipality = models.CharField(
+        'Barangay', max_length=120, choices=BARANGAY_CHOICES
+    )
+    barangay = models.CharField(
+        'Sitio / Purok / Landmark', max_length=120, blank=True
+    )
     # Precise device coordinates — masked before exposure to the public API.
     lat = models.FloatField()
     lng = models.FloatField()
@@ -96,8 +113,13 @@ class Incident(models.Model):
         HIGH = 'high', 'High'
 
     type = models.CharField(max_length=24, choices=Type.choices)
-    municipality = models.CharField(max_length=120, choices=MUNICIPALITY_CHOICES)
-    barangay = models.CharField(max_length=120, blank=True)
+    # Stored under the legacy name ``municipality`` but holds a Carigara barangay.
+    municipality = models.CharField(
+        'Barangay', max_length=120, choices=BARANGAY_CHOICES
+    )
+    barangay = models.CharField(
+        'Sitio / Purok / Landmark', max_length=120, blank=True
+    )
     severity = models.CharField(max_length=10, choices=Severity.choices, default=Severity.MEDIUM)
     status = models.CharField(max_length=12, choices=Status.choices, default=Status.REPORTED)
     summary = models.TextField(help_text='Internal summary for LGU staff.')
@@ -198,8 +220,8 @@ class Warning(models.Model):
     level = models.CharField(max_length=12, choices=Level.choices)
     hazard_type = models.CharField(max_length=20, choices=HazardType.choices)
     message = models.TextField()
-    # Stored as a JSON list of municipality names.
-    municipalities = models.JSONField(default=list)
+    # Stored as a JSON list of Carigara barangay names (legacy field name).
+    municipalities = models.JSONField('Barangays affected', default=list)
     effective_from = models.DateTimeField(default=timezone.now)
     effective_until = models.DateTimeField(null=True, blank=True)
     issued_at = models.DateTimeField(default=timezone.now)

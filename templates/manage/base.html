@@ -4,14 +4,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{% block title %}LGU Incident Management{% endblock %} — Leyte DEWS</title>
+    <title>{% block title %}LGU Incident Management{% endblock %} — Carigara DEWS</title>
     <link rel="icon" href="{% static 'favicon.svg' %}" type="image/svg+xml" />
     <link rel="stylesheet" href="{% static 'css/manage.css' %}" />
   </head>
   <body>
     {% if user.is_authenticated %}
     <header class="topbar">
-      <div class="brand"><span class="mark"><svg class="mark-ico" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 16 L51 47 H13 Z" fill="none" stroke="#fff" stroke-width="5" stroke-linejoin="round"/><rect x="29.5" y="28" width="5" height="11" rx="2.5" fill="#fff"/><circle cx="32" cy="44" r="2.8" fill="#fff"/></svg></span> Leyte DEWS
+      <div class="brand"><span class="mark"><svg class="mark-ico" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 16 L51 47 H13 Z" fill="none" stroke="#fff" stroke-width="5" stroke-linejoin="round"/><rect x="29.5" y="28" width="5" height="11" rx="2.5" fill="#fff"/><circle cx="32" cy="44" r="2.8" fill="#fff"/></svg></span> Carigara DEWS
         <span class="muted">· Incident Management</span></div>
       <nav>
         <a href="{% url 'manage-dashboard' %}">Dashboard</a>

@@ -68,8 +68,8 @@ def main():
     f_title = load_font(['segoeuib.ttf', 'arialbd.ttf', 'arial.ttf'], 92)
     f_sub = load_font(['segoeui.ttf', 'arial.ttf'], 38)
 
-    d.text((cx + cs + 34, cy + 6), 'MDRRMO · LEYTE', font=f_kicker, fill=BRAND)
-    d.text((cx + cs + 34, cy + 44), 'Leyte DEWS', font=f_title, fill=(255, 255, 255))
+    d.text((cx + cs + 34, cy + 6), 'MDRRMO · CARIGARA', font=f_kicker, fill=BRAND)
+    d.text((cx + cs + 34, cy + 44), 'Carigara DEWS', font=f_title, fill=(255, 255, 255))
 
     d.text((110, 360), 'Disaster Early Warning System', font=f_sub, fill=TEXT)
     d.text((110, 414),
@@ -78,7 +78,7 @@ def main():
 
     # Accent rule + footer URL.
     d.rounded_rectangle([110, 486, 350, 492], radius=3, fill=BRAND)
-    d.text((110, 540), 'leyte-dews.onrender.com',
+    d.text((110, 540), 'carigara-dews.onrender.com',
            font=load_font(['segoeui.ttf', 'arial.ttf'], 28), fill=MUTED)
 
     OUT.parent.mkdir(parents=True, exist_ok=True)

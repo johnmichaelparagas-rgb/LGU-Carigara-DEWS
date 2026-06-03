@@ -261,7 +261,7 @@ class WarningViewSet(viewsets.ModelViewSet):
 def health(request):
     return Response({
         'status': 'ok',
-        'service': 'leyte-dews-portal',
+        'service': 'carigara-dews-portal',
         'time': timezone.now(),
         'counts': {
             'sensors': Sensor.objects.count(),
@@ -329,7 +329,7 @@ class PublicIncidentsView(PublicApiKeyMixin, APIView):
 
 
 class PublicSituationView(PublicApiKeyMixin, APIView):
-    """One-shot snapshot for a municipality — ideal for mobile home screens."""
+    """One-shot snapshot for a barangay — ideal for mobile home screens."""
     def get(self, request):
         muni = request.query_params.get('municipality')
         sensors = Sensor.objects.all()
@@ -349,7 +349,7 @@ class PublicSituationView(PublicApiKeyMixin, APIView):
                 highest = s.status
 
         return Response({
-            'municipality': muni or 'All Leyte',
+            'municipality': muni or 'All Carigara',
             'updated_at': timezone.now(),
             'overall_hazard_status': highest,
             'active_warnings': len(warnings),

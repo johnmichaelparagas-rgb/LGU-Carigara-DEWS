@@ -2,8 +2,8 @@ from rest_framework import serializers
 
 from .masking import coarse_coord
 from .models import (
-    HAZARD_STATUS_ORDER, HazardImage, HazardStatus, HazardType, Incident,
-    MUNICIPALITIES, Reading, Sensor, Warning,
+    BARANGAYS, HAZARD_STATUS_ORDER, HazardImage, HazardStatus, HazardType,
+    Incident, Reading, Sensor, Warning,
 )
 
 
@@ -106,10 +106,10 @@ class WarningSerializer(serializers.ModelSerializer):
 
     def validate_municipalities(self, value):
         if not isinstance(value, list) or not value:
-            raise serializers.ValidationError('Select at least one municipality.')
-        invalid = [m for m in value if m not in MUNICIPALITIES]
+            raise serializers.ValidationError('Select at least one barangay.')
+        invalid = [m for m in value if m not in BARANGAYS]
         if invalid:
-            raise serializers.ValidationError(f'Unknown municipalities: {", ".join(invalid)}.')
+            raise serializers.ValidationError(f'Unknown barangays: {", ".join(invalid)}.')
         return value
 
 
@@ -120,7 +120,7 @@ class BulkStatusSerializer(serializers.Serializer):
         child=serializers.IntegerField(), required=False, default=list
     )
     municipality = serializers.ChoiceField(
-        choices=[(m, m) for m in MUNICIPALITIES], required=False, allow_blank=True
+        choices=[(b, b) for b in BARANGAYS], required=False, allow_blank=True
     )
     hazard_type = serializers.ChoiceField(
         choices=HazardType.choices, required=False, allow_blank=True
@@ -129,7 +129,7 @@ class BulkStatusSerializer(serializers.Serializer):
     def validate(self, attrs):
         if not attrs.get('sensor_ids') and not attrs.get('municipality') and not attrs.get('hazard_type'):
             raise serializers.ValidationError(
-                'Provide sensor_ids and/or a municipality/hazard_type filter to target sensors.'
+                'Provide sensor_ids and/or a barangay/hazard_type filter to target sensors.'
             )
         return attrs
 

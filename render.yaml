@@ -2,7 +2,7 @@
 # In the Render dashboard: New → Blueprint, then point it at this repo.
 services:
   - type: web
-    name: leyte-dews
+    name: carigara-dews
     runtime: python
     plan: free
     buildCommand: "./build.sh"
@@ -19,11 +19,11 @@ services:
         value: "1"                   # seed demo data on the first deploy; set to 0 afterwards
       - key: DATABASE_URL
         fromDatabase:
-          name: leyte-dews-db
+          name: carigara-dews-db
           property: connectionString
 
 databases:
-  - name: leyte-dews-db
+  - name: carigara-dews-db
     plan: free
-    databaseName: leyte_dews
-    user: leyte_dews
+    databaseName: carigara_dews
+    user: carigara_dews

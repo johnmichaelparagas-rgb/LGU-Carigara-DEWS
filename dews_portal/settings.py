@@ -1,4 +1,4 @@
-"""Django settings for the Leyte Disaster Early Warning System portal."""
+"""Django settings for the Carigara Disaster Early Warning System portal."""
 import os
 from datetime import timedelta
 from pathlib import Path

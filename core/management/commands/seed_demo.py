@@ -17,9 +17,9 @@ from core.models import HazardImage, Incident, Reading, Sensor, Warning
 
 
 DEMO_USERS = [
-    ('admin', 'Admin@2024', 'Maria Santos', User.Role.ADMIN, 'Tacloban City'),
-    ('dispatcher', 'Dispatcher@2024', 'Juan Dela Cruz', User.Role.DISPATCHER, 'Palo'),
-    ('viewer', 'Viewer@2024', 'Ana Reyes', User.Role.VIEWER, 'Tanauan'),
+    ('admin', 'Admin@2024', 'Maria Santos', User.Role.ADMIN, 'Sawang'),
+    ('dispatcher', 'Dispatcher@2024', 'Juan Dela Cruz', User.Role.DISPATCHER, 'Jugaban'),
+    ('viewer', 'Viewer@2024', 'Ana Reyes', User.Role.VIEWER, 'Barugohay Central'),
 ]
 
 
@@ -33,40 +33,42 @@ def make_sample_image(label, color):
     img.save(buf, format='JPEG', quality=85)
     return ContentFile(buf.getvalue(), name=f'{label.lower().replace(" ", "_")}.jpg')
 
+# name, hazard_type, barangay (stored in the `municipality` field),
+# sitio/landmark, lat, lng, unit, value, status. All sited within Carigara, Leyte.
 SENSORS = [
-    ('Mantorlot River Gauge', 'river_level', 'Tacloban City', 'Brgy. 109', 11.2447, 125.0048, 'm', 2.1, 'advisory'),
-    ('San Juanico Tide Station', 'storm_surge', 'Tacloban City', 'Brgy. 70 Naga-Naga', 11.3286, 124.9711, 'm', 0.8, 'normal'),
-    ('Palo Rain Gauge', 'rainfall', 'Palo', 'Brgy. San Joaquin', 11.1575, 124.9908, 'mm/hr', 14.5, 'watch'),
-    ('Binahaan River Sensor', 'flood', 'Pastrana', 'Brgy. Cabaohan', 11.1239, 124.8889, 'm', 3.4, 'warning'),
-    ('Tanauan Coastal Buoy', 'storm_surge', 'Tanauan', 'Brgy. Bislig', 11.1108, 125.0211, 'm', 1.2, 'advisory'),
-    ('Abuyog Slope Monitor', 'landslide', 'Abuyog', 'Brgy. Can-aporong', 10.7469, 125.0117, 'deg', 3.1, 'normal'),
-    ('Ormoc Pagsangaan Gauge', 'river_level', 'Ormoc City', 'Brgy. Cogon', 11.0064, 124.6075, 'm', 2.7, 'watch'),
-    ('Leyte Seismic Node', 'seismic', 'Carigara', 'Brgy. Poblacion', 11.2978, 124.6817, 'PGA', 0.02, 'normal'),
+    ('Canomantag River Gauge', 'river_level', 'Barugohay Central', 'Sitio Riverside', 11.2950, 124.6790, 'm', 2.1, 'advisory'),
+    ('Carigara Bay Tide Station', 'storm_surge', 'Baybay', 'Coastal Rd', 11.3052, 124.6838, 'm', 0.8, 'normal'),
+    ('Sawang Rain Gauge', 'rainfall', 'Sawang', 'Poblacion', 11.3008, 124.6821, 'mm/hr', 14.5, 'watch'),
+    ('Canlampay Creek Sensor', 'flood', 'Canlampay', 'Lower Purok', 11.2701, 124.6602, 'm', 3.4, 'warning'),
+    ('Guindapunan Coastal Buoy', 'storm_surge', 'Guindapunan East', 'Shoreline', 11.3081, 124.6904, 'm', 1.2, 'advisory'),
+    ('Macalpi Slope Monitor', 'landslide', 'Macalpi', 'Upland', 11.2553, 124.7048, 'deg', 3.1, 'normal'),
+    ('Jugaban River Gauge', 'river_level', 'Jugaban', 'Poblacion', 11.2992, 124.6772, 'm', 2.7, 'watch'),
+    ('Tinaguban Seismic Node', 'seismic', 'Tinaguban', 'Hillside', 11.2604, 124.7152, 'PGA', 0.02, 'normal'),
 ]
 
-# type, muni, brgy, severity, status, summary, reporter, contact,
-# dispatcher_name, dispatcher_phone, dispatcher_email
+# type, barangay (stored in `municipality`), sitio/landmark, severity, status,
+# summary, reporter, contact, dispatcher_name, dispatcher_phone, dispatcher_email
 INCIDENTS = [
-    ('flooding', 'Pastrana', 'Brgy. Cabaohan', 'high', 'in_progress',
+    ('flooding', 'Canlampay', 'Lower Purok', 'high', 'in_progress',
      'Knee-deep floodwater on access road; 12 families pre-emptively evacuated.',
      'Pedro Mabini', '+639171234567',
-     'Disp. Rosa Lim', '+639170001111', 'rlim@pastrana.mdrrmo.gov.ph'),
-    ('landslide', 'Abuyog', 'Brgy. Can-aporong', 'medium', 'in_progress',
+     'Disp. Rosa Lim', '+639170001111', 'rlim@carigara.mdrrmo.gov.ph'),
+    ('landslide', 'Macalpi', 'Upland', 'medium', 'in_progress',
      'Soil slip blocking one lane of the mountain road.',
      'Lita Gomez', '+639281112233',
-     'Disp. Mark Yu', '+639170002222', 'myu@abuyog.mdrrmo.gov.ph'),
-    ('power_outage', 'Palo', 'Brgy. San Joaquin', 'low', 'reported',
+     'Disp. Mark Yu', '+639170002222', 'myu@carigara.mdrrmo.gov.ph'),
+    ('power_outage', 'Sawang', 'Poblacion', 'low', 'reported',
      'Brownout affecting two sitios after heavy rain.',
      'Anonymous', '', '', '', ''),
-    ('road_blockage', 'Ormoc City', 'Brgy. Cogon', 'medium', 'resolved',
+    ('road_blockage', 'Jugaban', 'Poblacion', 'medium', 'resolved',
      'Fallen tree cleared by barangay response team.',
      'Brgy. Tanod J. Ramos', '+639395556677',
-     'Disp. Ben Tan', '+639170003333', 'btan@ormoc.mdrrmo.gov.ph'),
+     'Disp. Ben Tan', '+639170003333', 'btan@carigara.mdrrmo.gov.ph'),
 ]
 
 
 class Command(BaseCommand):
-    help = 'Seed demo data for the Leyte DEWS portal.'
+    help = 'Seed demo data for the Carigara DEWS portal.'
 
     def add_arguments(self, parser):
         parser.add_argument('--force', action='store_true', help='Wipe domain data and reseed.')
@@ -104,7 +106,7 @@ class Command(BaseCommand):
         # Sensors + readings
         for name, htype, muni, brgy, lat, lng, unit, val, st in SENSORS:
             sensor = Sensor.objects.create(
-                device_id=f'LEY-{htype[:3].upper()}-{random.randint(1000, 9999)}',
+                device_id=f'CAR-{htype[:3].upper()}-{random.randint(1000, 9999)}',
                 name=name, hazard_type=htype, municipality=muni, barangay=brgy,
                 lat=lat, lng=lng, status=st,
                 installed_at=now - timedelta(days=200),
@@ -145,15 +147,15 @@ class Command(BaseCommand):
 
         # Active early warning
         Warning.objects.create(
-            title='Orange Rainfall Warning — Central Leyte',
+            title='Orange Rainfall Warning — Carigara',
             level='orange', hazard_type='rainfall',
             message=('Heavy rains expected within 2 hours. Residents in low-lying and '
-                     'riverside barangays of Palo, Pastrana, and Tanauan should prepare to '
-                     'evacuate. Monitor official LGU channels.'),
-            municipalities=['Palo', 'Pastrana', 'Tanauan'],
+                     'riverside barangays of Canlampay, Sawang, and Barugohay Central '
+                     'should prepare to evacuate. Monitor official LGU channels.'),
+            municipalities=['Canlampay', 'Sawang', 'Barugohay Central'],
             effective_from=now - timedelta(minutes=30),
             effective_until=now + timedelta(hours=3),
-            issuing_office='PDRRMO Leyte', issued_by=admin_user,
+            issuing_office='MDRRMO Carigara', issued_by=admin_user,
         )
 
         # Create role Groups + permissions and sync membership.

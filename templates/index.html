@@ -5,25 +5,25 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description"
-      content="Leyte DEWS — the Municipal Disaster Risk Reduction & Management Office portal
+      content="Carigara DEWS — the Municipal Disaster Risk Reduction & Management Office portal
                for real-time hazard monitoring, incident reporting, and early-warning broadcasts." />
     <meta name="theme-color" content="#0f172a" />
-    <title>Leyte DEWS — Disaster Early Warning System | MDRRMO Portal</title>
+    <title>Carigara DEWS — Disaster Early Warning System | MDRRMO Portal</title>
 
     <!-- Social sharing / Open Graph (absolute URLs derived from the request) -->
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="Leyte DEWS" />
-    <meta property="og:title" content="Leyte DEWS — Disaster Early Warning System" />
+    <meta property="og:site_name" content="Carigara DEWS" />
+    <meta property="og:title" content="Carigara DEWS — Disaster Early Warning System" />
     <meta property="og:description"
-      content="Real-time hazard monitoring, incident reporting, and official early-warning broadcasts for Leyte's municipalities." />
+      content="Real-time hazard monitoring, incident reporting, and official early-warning broadcasts for the barangays of Carigara, Leyte." />
     <meta property="og:url" content="{{ request.scheme }}://{{ request.get_host }}/" />
     <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'og-image.png' %}" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Leyte DEWS — Disaster Early Warning System" />
+    <meta name="twitter:title" content="Carigara DEWS — Disaster Early Warning System" />
     <meta name="twitter:description"
-      content="Real-time hazard monitoring, incident reporting, and official early-warning broadcasts for Leyte's municipalities." />
+      content="Real-time hazard monitoring, incident reporting, and official early-warning broadcasts for the barangays of Carigara, Leyte." />
     <meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'og-image.png' %}" />
 
     <link rel="icon" href="{% static 'favicon.svg' %}" type="image/svg+xml" />
@@ -36,7 +36,7 @@
         <a class="nav-brand" href="#top">
           <span class="brand-mark"><svg class="mark-ico" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 16 L51 47 H13 Z" fill="none" stroke="#fff" stroke-width="5" stroke-linejoin="round"/><rect x="29.5" y="28" width="5" height="11" rx="2.5" fill="#fff"/><circle cx="32" cy="44" r="2.8" fill="#fff"/></svg></span>
           <span class="nav-brand-text">
-            <strong>Leyte DEWS</strong>
+            <strong>Carigara DEWS</strong>
             <small>Disaster Early Warning System</small>
           </span>
         </a>
@@ -63,11 +63,11 @@
     <section class="hero" id="top">
       <div class="hero-glow" aria-hidden="true"></div>
       <div class="hero-inner">
-        <span class="eyebrow">Municipal Disaster Risk Reduction &amp; Management Office · Leyte</span>
+        <span class="eyebrow">Municipal Disaster Risk Reduction &amp; Management Office · Carigara, Leyte</span>
         <h1>Early warnings that reach<br />your community in time.</h1>
         <p class="lead">
           A unified operations portal for monitoring hazard sensors, logging field incidents,
-          and broadcasting official early warnings across Leyte's municipalities — built for
+          and broadcasting official early warnings across the barangays of Carigara — built for
           MDRRMO responders, trusted by the public.
         </p>
         <div class="hero-cta">
@@ -108,7 +108,7 @@
         <article class="feature">
           <div class="feature-icon"><svg class="feat-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
           <h3>Real-time hazard monitoring</h3>
-          <p>Track flood, landslide, and storm-surge sensors across municipalities with live readings and per-area status roll-ups.</p>
+          <p>Track flood, landslide, and storm-surge sensors across Carigara's barangays with live readings and per-area status roll-ups.</p>
         </article>
         <article class="feature">
           <div class="feature-icon"><svg class="feat-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg></div>
@@ -118,12 +118,12 @@
         <article class="feature">
           <div class="feature-icon"><svg class="feat-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg></div>
           <h3>Early-warning broadcasts</h3>
-          <p>Issue colour-coded alerts (Information → Yellow → Orange → Red) targeted to the exact affected municipalities.</p>
+          <p>Issue colour-coded alerts (Information → Yellow → Orange → Red) targeted to the exact affected barangays.</p>
         </article>
         <article class="feature">
           <div class="feature-icon"><svg class="feat-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 4h-7"/><path d="M10 4H3"/><path d="M21 12h-9"/><path d="M8 12H3"/><path d="M21 20h-5"/><path d="M12 20H3"/><path d="M14 2v4"/><path d="M8 10v4"/><path d="M16 18v4"/></svg></div>
           <h3>Bulk status operations</h3>
-          <p>Raise or lower hazard status across many sensors at once — by selection, municipality, or hazard type.</p>
+          <p>Raise or lower hazard status across many sensors at once — by selection, barangay, or hazard type.</p>
         </article>
         <article class="feature">
           <div class="feature-icon"><svg class="feat-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
@@ -160,7 +160,7 @@
         <div class="step">
           <div class="step-num">3</div>
           <h3>Warn</h3>
-          <p>Official early warnings are broadcast to affected municipalities and the public situation feed.</p>
+          <p>Official early warnings are broadcast to affected barangays and the public situation feed.</p>
         </div>
       </div>
     </section>
@@ -206,7 +206,7 @@
     <section class="section section-alt" id="status">
       <div class="section-head">
         <span class="eyebrow">Live status</span>
-        <h2>Current situation across Leyte</h2>
+        <h2>Current situation across Carigara</h2>
         <p>A public, privacy-safe snapshot pulled directly from the operations portal.</p>
       </div>
       <div class="status-panel">
@@ -242,8 +242,8 @@
         <div class="footer-brand">
           <span class="brand-mark sm"><svg class="mark-ico" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 16 L51 47 H13 Z" fill="none" stroke="#fff" stroke-width="5" stroke-linejoin="round"/><rect x="29.5" y="28" width="5" height="11" rx="2.5" fill="#fff"/><circle cx="32" cy="44" r="2.8" fill="#fff"/></svg></span>
           <div>
-            <strong>Leyte DEWS</strong>
-            <p class="muted">Municipal Disaster Risk Reduction &amp; Management Office</p>
+            <strong>Carigara DEWS</strong>
+            <p class="muted">Municipal Disaster Risk Reduction &amp; Management Office · Carigara, Leyte</p>
           </div>
         </div>
         <nav class="footer-links">
@@ -252,7 +252,7 @@
           <a href="/manage/">Management console</a>
           <a href="/api/health">System health</a>
         </nav>
-        <p class="footer-copy muted">© <span id="year"></span> MDRRMO Leyte · Disaster Early Warning System</p>
+        <p class="footer-copy muted">© <span id="year"></span> MDRRMO Carigara · Disaster Early Warning System</p>
       </div>
     </footer>
 

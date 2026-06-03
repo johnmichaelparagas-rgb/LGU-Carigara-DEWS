@@ -24,7 +24,8 @@ class User(AbstractUser):
     }
 
     role = models.CharField(max_length=20, choices=Role.choices, default=Role.VIEWER)
-    municipality = models.CharField(max_length=120, blank=True)
+    # Staff member's assigned Carigara barangay (legacy field name kept).
+    municipality = models.CharField('Barangay', max_length=120, blank=True)
 
     @property
     def is_lgu_admin(self):
