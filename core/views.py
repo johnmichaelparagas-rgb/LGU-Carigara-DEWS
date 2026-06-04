@@ -32,15 +32,9 @@ def record_audit(request, action_name, **details):
     )
 
 
-# ---------------------------------------------------------------------------
-# Authentication
-# ---------------------------------------------------------------------------
 class LoginView(APIView):
     """Exchange username/password for a JWT access token + user profile."""
     permission_classes = [AllowAny]
-    # No session auth here: this endpoint is token-based, so it must not run
-    # SessionAuthentication (which would enforce CSRF when a Django session
-    # cookie is present — e.g. after signing into the /login/ management UI).
     authentication_classes = []
     throttle_classes = [ScopedRateThrottle]
     throttle_scope = 'login'
@@ -53,7 +47,6 @@ class LoginView(APIView):
         try:
             user = authenticate(request, username=username, password=password)
         except PermissionDenied:
-            # Raised by django-axes when the account/IP is locked out.
             return Response(
                 {'error': 'Account temporarily locked after too many failed attempts. '
                           'Try again later.', 'locked': True},
@@ -92,9 +85,6 @@ def _user_payload(user):
     }
 
 
-# ---------------------------------------------------------------------------
-# Secure dashboard API (auth required)
-# ---------------------------------------------------------------------------
 class SensorViewSet(viewsets.ModelViewSet):
     queryset = Sensor.objects.all()
     serializer_class = SensorSerializer
@@ -230,7 +220,7 @@ class WarningViewSet(viewsets.ModelViewSet):
     queryset = Warning.objects.all()
     serializer_class = WarningSerializer
     permission_classes = [IsEditorOrReadOnly]
-    http_method_names = ['get', 'post', 'head', 'options']  # cancel via custom action
+    http_method_names = ['get', 'post', 'head', 'options']
 
     def get_queryset(self):
         qs = Warning.objects.all()
@@ -253,9 +243,6 @@ class WarningViewSet(viewsets.ModelViewSet):
         return Response(WarningSerializer(warning).data)
 
 
-# ---------------------------------------------------------------------------
-# Health
-# ---------------------------------------------------------------------------
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def health(request):
@@ -272,9 +259,6 @@ def health(request):
     })
 
 
-# ---------------------------------------------------------------------------
-# Public masked API (mobile / citizen clients)
-# ---------------------------------------------------------------------------
 class PublicApiKeyMixin:
     """Optional X-API-Key gate, plus open throttling for public clients."""
     permission_classes = [AllowAny]

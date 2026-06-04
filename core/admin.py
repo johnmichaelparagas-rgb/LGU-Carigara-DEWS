@@ -2,7 +2,6 @@ from django.contrib import admin
 
 from .models import AuditLog, Incident, Reading, Sensor, Warning
 
-# Brand the admin to match the public site (Carigara DEWS / MDRRMO).
 admin.site.site_header = 'Carigara DEWS Administration'
 admin.site.site_title = 'Carigara DEWS'
 admin.site.index_title = 'MDRRMO Carigara Control Panel'

@@ -16,7 +16,6 @@ class User(AbstractUser):
         DISPATCHER = 'dispatcher', 'Dispatcher'
         VIEWER = 'viewer', 'Public Viewer'
 
-    # Django Group names that correspond to each role.
     GROUP_NAMES = {
         Role.ADMIN: 'LGU Admin',
         Role.DISPATCHER: 'Dispatcher',
@@ -24,7 +23,6 @@ class User(AbstractUser):
     }
 
     role = models.CharField(max_length=20, choices=Role.choices, default=Role.VIEWER)
-    # Staff member's assigned Carigara barangay (legacy field name kept).
     municipality = models.CharField('Barangay', max_length=120, blank=True)
 
     @property

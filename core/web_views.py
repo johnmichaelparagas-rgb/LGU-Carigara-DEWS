@@ -32,7 +32,6 @@ def dashboard(request):
     paginator = Paginator(f.qs, 10)
     page = paginator.get_page(request.GET.get('page'))
 
-    # Preserve active filters across pagination links.
     querystring = request.GET.copy()
     querystring.pop('page', None)
 
@@ -87,7 +86,6 @@ def incident_edit(request, pk):
     is_dispatcher = getattr(request.user, 'is_dispatcher', False)
 
     if not (is_admin or is_dispatcher):
-        # Public Viewer — read-only detail.
         return render(request, 'manage/incident_detail.html', {'incident': incident})
 
     if is_admin:
@@ -108,7 +106,6 @@ def incident_edit(request, pk):
             'form': form, 'formset': formset, 'mode': 'edit', 'incident': incident,
         })
 
-    # Dispatcher — status update only.
     if request.method == 'POST':
         form = IncidentStatusForm(request.POST, instance=incident)
         if form.is_valid():

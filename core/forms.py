@@ -35,8 +35,6 @@ class HazardImageForm(forms.ModelForm):
         fields = ['image', 'caption']
 
 
-# Inline formset: one Incident -> many HazardImages, edited in a single submit.
-# Images are optional (min_num=0); add up to `extra` new rows at a time.
 HazardImageFormSet = inlineformset_factory(
     Incident,
     HazardImage,

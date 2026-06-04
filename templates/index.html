@@ -10,7 +10,7 @@
     <meta name="theme-color" content="#0f172a" />
     <title>Carigara DEWS — Disaster Early Warning System | MDRRMO Portal</title>
 
-    <!-- Social sharing / Open Graph (absolute URLs derived from the request) -->
+    
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Carigara DEWS" />
     <meta property="og:title" content="Carigara DEWS — Disaster Early Warning System" />
@@ -30,7 +30,7 @@
     <link rel="stylesheet" href="{% static 'css/landing.css' %}" />
   </head>
   <body>
-    <!-- ───────────────────────── Navigation ───────────────────────── -->
+    
     <header class="nav">
       <div class="nav-inner" id="nav-inner">
         <a class="nav-brand" href="#top">
@@ -59,7 +59,7 @@
       </div>
     </header>
 
-    <!-- ───────────────────────── Hero ───────────────────────── -->
+    
     <section class="hero" id="top">
       <div class="hero-glow" aria-hidden="true"></div>
       <div class="hero-inner">
@@ -75,7 +75,7 @@
           <a class="btn btn-ghost btn-lg" href="#status">View live situation</a>
         </div>
 
-        <!-- Live public situation banner (graceful fallback if API is unavailable) -->
+        
         <div class="live-banner" id="live-banner" data-state="loading">
           <span class="live-dot"></span>
           <span class="live-label">Current hazard status —</span>
@@ -87,7 +87,7 @@
       </div>
     </section>
 
-    <!-- ───────────────────────── Stats strip ───────────────────────── -->
+    
     <section class="strip">
       <div class="strip-inner">
         <div class="strip-item"><div class="strip-num" id="stat-sensors">—</div><div class="strip-lbl">Hazard sensors monitored</div></div>
@@ -97,7 +97,7 @@
       </div>
     </section>
 
-    <!-- ───────────────────────── Features ───────────────────────── -->
+    
     <section class="section" id="features">
       <div class="section-head">
         <span class="eyebrow">Capabilities</span>
@@ -138,7 +138,7 @@
       </div>
     </section>
 
-    <!-- ───────────────────────── How it works ───────────────────────── -->
+    
     <section class="section section-alt" id="how">
       <div class="section-head">
         <span class="eyebrow">How it works</span>
@@ -165,7 +165,7 @@
       </div>
     </section>
 
-    <!-- ───────────────────────── Roles ───────────────────────── -->
+    
     <section class="section" id="roles">
       <div class="section-head">
         <span class="eyebrow">Access &amp; roles</span>
@@ -202,7 +202,7 @@
       </div>
     </section>
 
-    <!-- ───────────────────────── Live status ───────────────────────── -->
+    
     <section class="section section-alt" id="status">
       <div class="section-head">
         <span class="eyebrow">Live status</span>
@@ -224,7 +224,7 @@
       </div>
     </section>
 
-    <!-- ───────────────────────── CTA ───────────────────────── -->
+    
     <section class="cta">
       <div class="cta-inner">
         <h2>Ready to coordinate the response?</h2>
@@ -236,7 +236,7 @@
       </div>
     </section>
 
-    <!-- ───────────────────────── Footer ───────────────────────── -->
+    
     <footer class="footer">
       <div class="footer-inner">
         <div class="footer-brand">
@@ -257,10 +257,8 @@
     </footer>
 
     <script>
-      // Year
       document.getElementById('year').textContent = new Date().getFullYear();
 
-      // Mobile navigation toggle.
       (function mobileNav() {
         const inner = document.getElementById('nav-inner');
         const toggle = document.getElementById('nav-toggle');
@@ -271,14 +269,12 @@
           toggle.setAttribute('aria-expanded', String(open));
         };
         toggle.addEventListener('click', () => setOpen(!inner.classList.contains('open')));
-        // Close after tapping a link, or when clicking outside the menu.
         collapse.addEventListener('click', (e) => { if (e.target.closest('a')) setOpen(false); });
         document.addEventListener('click', (e) => {
           if (inner.classList.contains('open') && !inner.contains(e.target)) setOpen(false);
         });
       })();
 
-      // Pretty labels for the hazard status scale.
       const STATUS_LABEL = {
         normal: 'Normal', advisory: 'Advisory', watch: 'Watch',
         warning: 'Warning', critical: 'Critical',
@@ -294,7 +290,6 @@
         return then.toLocaleDateString();
       }
 
-      // Pull the public, privacy-safe situation snapshot to populate live UI.
       async function loadSituation() {
         try {
           const res = await fetch('/api/public/situation');
@@ -307,7 +302,6 @@
           const incidents = (data.incidents || []).length;
           const sensors = (data.sensors || []).length;
 
-          // Hero live banner
           const banner = document.getElementById('live-banner');
           banner.dataset.state = status;
           document.getElementById('live-status').textContent = label;
@@ -315,12 +309,10 @@
             warnings + (warnings === 1 ? ' active warning' : ' active warnings');
           document.getElementById('live-updated').textContent = 'updated ' + relativeTime(data.updated_at);
 
-          // Stats strip
           document.getElementById('stat-sensors').textContent = sensors;
           document.getElementById('stat-warnings').textContent = warnings;
           document.getElementById('stat-incidents').textContent = incidents;
 
-          // Status panel
           const badge = document.getElementById('status-badge');
           badge.textContent = label;
           badge.dataset.level = status;
@@ -328,7 +320,6 @@
           document.getElementById('status-incidents').textContent = incidents;
           document.getElementById('status-updated').textContent = relativeTime(data.updated_at);
 
-          // Warning feed
           const feed = document.getElementById('warning-feed');
           const items = data.warnings || [];
           if (items.length) {
@@ -346,7 +337,6 @@
             }).join('');
           }
         } catch (err) {
-          // Graceful fallback — the marketing site still stands on its own.
           const banner = document.getElementById('live-banner');
           banner.dataset.state = 'offline';
           document.getElementById('live-status').textContent = 'Unavailable';
@@ -359,12 +349,8 @@
       }
 
       loadSituation();
-      // Refresh the live snapshot every 60s while the page is open.
       setInterval(loadSituation, 60000);
 
-      // Scroll-reveal: gracefully fade sections in as they enter the viewport.
-      // Progressive enhancement — skipped if reduced motion is preferred or
-      // IntersectionObserver is unavailable, leaving all content visible.
       (function scrollReveal() {
         const motionOK = window.matchMedia('(prefers-reduced-motion: no-preference)').matches;
         if (!motionOK || !('IntersectionObserver' in window)) return;

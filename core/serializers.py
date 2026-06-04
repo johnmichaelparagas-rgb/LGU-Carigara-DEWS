@@ -31,9 +31,6 @@ class HazardImageSerializer(serializers.ModelSerializer):
         return self._abs(obj.thumbnail) or self._abs(obj.image)
 
 
-# ---------------------------------------------------------------------------
-# Internal (secure dashboard) serializers — full operational detail.
-# ---------------------------------------------------------------------------
 class ReadingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reading
@@ -86,7 +83,6 @@ class IncidentSerializer(serializers.ModelSerializer):
             for field in Incident.MASKED_CONTACT_FIELDS:
                 if data.get(field):
                     data[field] = '[redacted]'
-            # Public consumers also never see reporter PII / internal notes.
             for field in ('reporter_name', 'reporter_contact', 'internal_notes'):
                 data.pop(field, None)
         return data
@@ -134,9 +130,6 @@ class BulkStatusSerializer(serializers.Serializer):
         return attrs
 
 
-# ---------------------------------------------------------------------------
-# Public (masked) serializers — safe for mobile/citizen clients.
-# ---------------------------------------------------------------------------
 class PublicSensorSerializer(serializers.ModelSerializer):
     location = serializers.SerializerMethodField()
     last_reading = serializers.SerializerMethodField()
@@ -162,7 +155,6 @@ class PublicIncidentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Incident
-        # No reporter PII, no internal notes.
         fields = ['id', 'type', 'municipality', 'barangay', 'status',
                   'severity', 'summary', 'location', 'reported_at']
 
@@ -176,6 +168,5 @@ class PublicIncidentSerializer(serializers.ModelSerializer):
 class PublicWarningSerializer(serializers.ModelSerializer):
     class Meta:
         model = Warning
-        # No issuer identity exposed.
         fields = ['id', 'title', 'level', 'hazard_type', 'message', 'municipalities',
                   'effective_from', 'effective_until', 'issued_at', 'issuing_office', 'active']

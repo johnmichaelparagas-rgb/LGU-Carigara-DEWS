@@ -33,8 +33,6 @@ def make_sample_image(label, color):
     img.save(buf, format='JPEG', quality=85)
     return ContentFile(buf.getvalue(), name=f'{label.lower().replace(" ", "_")}.jpg')
 
-# name, hazard_type, barangay (stored in the `municipality` field),
-# sitio/landmark, lat, lng, unit, value, status. All sited within Carigara, Leyte.
 SENSORS = [
     ('Canomantag River Gauge', 'river_level', 'Barugohay Central', 'Sitio Riverside', 11.2950, 124.6790, 'm', 2.1, 'advisory'),
     ('Carigara Bay Tide Station', 'storm_surge', 'Baybay', 'Coastal Rd', 11.3052, 124.6838, 'm', 0.8, 'normal'),
@@ -46,8 +44,6 @@ SENSORS = [
     ('Tinaguban Seismic Node', 'seismic', 'Tinaguban', 'Hillside', 11.2604, 124.7152, 'PGA', 0.02, 'normal'),
 ]
 
-# type, barangay (stored in `municipality`), sitio/landmark, severity, status,
-# summary, reporter, contact, dispatcher_name, dispatcher_phone, dispatcher_email
 INCIDENTS = [
     ('flooding', 'Canlampay', 'Lower Purok', 'high', 'in_progress',
      'Knee-deep floodwater on access road; 12 families pre-emptively evacuated.',
@@ -90,7 +86,6 @@ class Command(BaseCommand):
 
         now = timezone.now()
 
-        # Accounts
         admin_user = None
         for username, pw, full, role, muni in DEMO_USERS:
             first, _, last = full.partition(' ')
@@ -100,10 +95,9 @@ class Command(BaseCommand):
             )
             if role == User.Role.ADMIN:
                 admin_user = user
-                user.is_staff = True  # allow Django admin access
+                user.is_staff = True
                 user.save(update_fields=['is_staff'])
 
-        # Sensors + readings
         for name, htype, muni, brgy, lat, lng, unit, val, st in SENSORS:
             sensor = Sensor.objects.create(
                 device_id=f'CAR-{htype[:3].upper()}-{random.randint(1000, 9999)}',
@@ -118,11 +112,9 @@ class Command(BaseCommand):
                     unit=unit,
                     recorded_at=now - timedelta(minutes=30 * (i + 1)),
                 )
-            # Most-recent reading reflects the headline value.
             Reading.objects.create(sensor=sensor, value=val, unit=unit,
                                    recorded_at=now - timedelta(minutes=random.randint(1, 20)))
 
-        # Incidents (+ sample hazard images on the first one)
         first_incident = None
         for row in INCIDENTS:
             (itype, muni, brgy, sev, st, summary, reporter, contact,
@@ -137,7 +129,6 @@ class Command(BaseCommand):
             )
             first_incident = first_incident or incident
 
-        # Attach a couple of generated images to demonstrate thumbnails.
         for label, color in [('Flooded Road', (37, 99, 235)), ('Evacuation Site', (5, 150, 105))]:
             HazardImage.objects.create(
                 incident=first_incident,
@@ -145,7 +136,6 @@ class Command(BaseCommand):
                 caption=label,
             )
 
-        # Active early warning
         Warning.objects.create(
             title='Orange Rainfall Warning — Carigara',
             level='orange', hazard_type='rainfall',
@@ -158,7 +148,6 @@ class Command(BaseCommand):
             issuing_office='MDRRMO Carigara', issued_by=admin_user,
         )
 
-        # Create role Groups + permissions and sync membership.
         call_command('setup_roles')
 
         self.stdout.write(self.style.SUCCESS('Seed complete.'))

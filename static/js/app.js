@@ -1,17 +1,13 @@
-// Carigara DEWS dashboard — vanilla JS SPA talking to the Django REST API.
 'use strict';
 
 const HAZARD_TYPES = ['flood', 'rainfall', 'river_level', 'landslide', 'storm_surge', 'seismic'];
 const HAZARD_STATUS = ['normal', 'advisory', 'watch', 'warning', 'critical'];
 const INCIDENT_TYPES = ['flooding', 'landslide', 'road_blockage', 'structural_damage', 'casualty', 'evacuation', 'power_outage', 'other'];
 const INCIDENT_STATUS = ['reported', 'in_progress', 'resolved', 'closed'];
-// Carigara, Leyte barangays. The API still names this field "municipality"
-// (legacy contract); here it carries the barangay the portal operates over.
 const BARANGAYS = ['Bagong Lipunan', 'Balilit', 'Barayong', 'Barugohay Central', 'Barugohay Norte', 'Barugohay Sur', 'Baybay', 'Binibihan', 'Bislig', 'Caghalo', 'Camansi', 'Canal', 'Candigahub', 'Canfabi', 'Canlampay', 'Cogon', 'Cutay', 'East Visoria', 'Guindapunan East', 'Guindapunan West', 'Hiluctogan', 'Jugaban', 'Libo', 'Lower Hiraan', 'Lower Sogod', 'Macalpi', 'Manloy', 'Nauguisan', 'Paglaum', 'Pangna', 'Parag-um', 'Parina', 'Piloro', 'Ponong', 'Rizal', 'Sagkahan', 'San Isidro', 'San Juan', 'San Mateo', 'Santa Fe', 'Sawang', 'Tagak', 'Tangnan', 'Tigbao', 'Tinaguban', 'Upper Hiraan', 'Upper Sogod', 'Uyawan', 'West Visoria'];
 
 const state = { token: null, user: null, sensors: [], selected: new Set() };
 
-// ---- DOM helpers ----------------------------------------------------------
 const $ = (s) => document.querySelector(s);
 const $$ = (s) => Array.from(document.querySelectorAll(s));
 function el(tag, attrs = {}, children = []) {
@@ -35,7 +31,6 @@ function toast(msg, kind = '') {
   clearTimeout(toastTimer); toastTimer = setTimeout(() => (t.hidden = true), 3500);
 }
 
-// Flatten a DRF error object into a readable string.
 function extractError(data, fallback) {
   if (!data || typeof data !== 'object') return fallback;
   if (data.error) return data.error;
@@ -48,7 +43,6 @@ function extractError(data, fallback) {
   return parts.join(' · ') || fallback;
 }
 
-// ---- API client -----------------------------------------------------------
 async function api(path, { method = 'GET', body } = {}) {
   const headers = { 'Content-Type': 'application/json' };
   if (state.token) headers.Authorization = `Bearer ${state.token}`;
@@ -58,10 +52,8 @@ async function api(path, { method = 'GET', body } = {}) {
   if (!res.ok) throw new Error(extractError(data, `Request failed (${res.status}).`));
   return data;
 }
-// DRF list endpoints are paginated; normalize to an array.
 const listOf = (data) => (Array.isArray(data) ? data : data.results || []);
 
-// ---- Auth -----------------------------------------------------------------
 function saveSession() {
   localStorage.setItem('dews_token', state.token);
   localStorage.setItem('dews_user', JSON.stringify(state.user));
@@ -86,7 +78,6 @@ $('#login-form').addEventListener('submit', async (e) => {
 });
 $('#logout-btn').addEventListener('click', logout);
 
-// ---- Bootstrap ------------------------------------------------------------
 function enterApp() {
   $('#login-view').hidden = true; $('#app-view').hidden = false;
   const u = state.user;
@@ -107,7 +98,6 @@ function populateSelects() {
   $('#wn-munis').innerHTML = BARANGAYS.map((m) => opt(m, m)).join('');
 }
 
-// ---- Tabs -----------------------------------------------------------------
 $$('.tab').forEach((tab) => tab.addEventListener('click', () => {
   $$('.tab').forEach((t) => t.classList.remove('active'));
   $$('.tab-panel').forEach((p) => p.classList.remove('active'));
@@ -115,7 +105,6 @@ $$('.tab').forEach((tab) => tab.addEventListener('click', () => {
   $(`#tab-${tab.dataset.tab}`).classList.add('active');
 }));
 
-// ---- Refresh --------------------------------------------------------------
 async function refreshAll() {
   await Promise.all([loadSensors(), loadIncidents(), loadWarnings()]);
 }
@@ -137,7 +126,6 @@ async function loadOverview() {
     }
     renderHazardBar();
 
-    // Roll up the highest hazard status per barangay (the `municipality` field).
     const byBrgy = {};
     for (const s of state.sensors) {
       const cur = byBrgy[s.municipality] || 'normal';
@@ -150,7 +138,6 @@ async function loadOverview() {
   } catch (err) { toast(err.message, 'err'); }
 }
 
-// Stacked bar of how many sensors sit at each hazard status level.
 function renderHazardBar() {
   const bar = $('#hazard-bar'); const legend = $('#hazard-legend');
   if (!bar) return;
@@ -175,7 +162,6 @@ function renderHazardBar() {
   }
 }
 
-// ---- Sensors --------------------------------------------------------------
 async function loadSensors() {
   try {
     const params = new URLSearchParams();
@@ -253,7 +239,6 @@ $('#bulk-apply-filter').addEventListener('click', async () => {
   } catch (err) { toast(err.message, 'err'); }
 });
 
-// ---- Incidents ------------------------------------------------------------
 async function loadIncidents() {
   try {
     const data = await api('/incidents/');
@@ -306,7 +291,6 @@ $('#incident-form')?.addEventListener('submit', async (e) => {
   } catch (err) { msg.textContent = err.message; msg.className = 'form-msg err'; msg.hidden = false; }
 });
 
-// ---- Warnings -------------------------------------------------------------
 async function loadWarnings() {
   try {
     const data = await api('/warnings/');
@@ -356,7 +340,6 @@ $('#warning-form')?.addEventListener('submit', async (e) => {
   } catch (err) { msg.textContent = err.message; msg.className = 'form-msg err'; msg.hidden = false; }
 });
 
-// ---- Restore session ------------------------------------------------------
 (function restore() {
   const token = localStorage.getItem('dews_token');
   const user = localStorage.getItem('dews_user');

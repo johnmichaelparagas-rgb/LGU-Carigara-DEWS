@@ -24,21 +24,17 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         ALL = ['add', 'change', 'delete', 'view']
 
-        # LGU Admin — full CRUD on domain models + user management.
         admin_perms = []
         for model in (Incident, HazardImage, Sensor, Warning):
             admin_perms += perms_for(model, ALL)
-        admin_perms += perms_for(User, ALL)  # user management
+        admin_perms += perms_for(User, ALL)
 
-        # Dispatcher — view everything, update incidents/images/sensors/warnings,
-        # but no create/delete of incidents and no user management.
         dispatcher_perms = []
         dispatcher_perms += perms_for(Incident, ['view', 'change'])
         dispatcher_perms += perms_for(HazardImage, ['view', 'add', 'change'])
         dispatcher_perms += perms_for(Sensor, ['view', 'change'])
         dispatcher_perms += perms_for(Warning, ['view', 'add', 'change'])
 
-        # Public Viewer — read-only.
         viewer_perms = []
         for model in (Incident, HazardImage, Sensor, Warning):
             viewer_perms += perms_for(model, ['view'])
@@ -53,7 +49,6 @@ class Command(BaseCommand):
             group.permissions.set(perms)
             self.stdout.write(self.style.SUCCESS(f'  {name}: {len(perms)} permissions set'))
 
-        # Re-sync every user's group membership to their role.
         synced = 0
         for user in User.objects.all():
             user.sync_group()

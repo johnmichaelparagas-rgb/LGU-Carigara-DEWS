@@ -45,7 +45,6 @@ class IncidentPermission(permissions.BasePermission):
             return False
         if getattr(user, 'is_lgu_admin', False):
             return True
-        # Dispatchers may update but not create or delete.
         if getattr(user, 'is_dispatcher', False):
             return request.method in ('PUT', 'PATCH')
         return False
