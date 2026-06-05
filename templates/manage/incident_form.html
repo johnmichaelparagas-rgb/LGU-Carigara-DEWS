@@ -29,9 +29,13 @@
       <div class="image-row card-inset">
         {{ imgform.id }}
         {% if imgform.instance.pk and imgform.instance.thumbnail %}
-          <img class="thumb" src="{{ imgform.instance.thumbnail.url }}" alt="thumbnail" />
+          <a href="{{ imgform.instance.image.url }}" target="_blank" title="View photo">
+            <img class="thumb" src="{{ imgform.instance.thumbnail.url }}" alt="thumbnail" />
+          </a>
         {% elif imgform.instance.pk and imgform.instance.image %}
-          <img class="thumb" src="{{ imgform.instance.image.url }}" alt="image" />
+          <a href="{{ imgform.instance.image.url }}" target="_blank" title="View photo">
+            <img class="thumb" src="{{ imgform.instance.image.url }}" alt="image" />
+          </a>
         {% else %}
           <div class="thumb placeholder">no image</div>
         {% endif %}

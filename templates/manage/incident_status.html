@@ -12,7 +12,9 @@
   {% if incident.images.all %}
   <div class="thumb-strip">
     {% for img in incident.images.all %}
-      <img class="thumb" src="{% if img.thumbnail %}{{ img.thumbnail.url }}{% else %}{{ img.image.url }}{% endif %}" alt="{{ img.caption }}" />
+      <a href="{{ img.image.url }}" target="_blank" title="{{ img.caption|default:'View photo' }}">
+        <img class="thumb" src="{% if img.thumbnail %}{{ img.thumbnail.url }}{% else %}{{ img.image.url }}{% endif %}" alt="{{ img.caption }}" />
+      </a>
     {% endfor %}
   </div>
   {% endif %}
