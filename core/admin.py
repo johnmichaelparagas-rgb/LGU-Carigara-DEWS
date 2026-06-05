@@ -5,14 +5,15 @@ from .models import AuditLog, HazardImage, Incident, Reading, Sensor, Warning
 
 
 def _img_tag(obj, height):
-    src = ''
-    if obj.thumbnail:
-        src = obj.thumbnail.url
-    elif obj.image:
-        src = obj.image.url
-    if not src:
+    thumb = obj.thumbnail.url if obj.thumbnail else (obj.image.url if obj.image else '')
+    if not thumb:
         return '—'
-    return format_html('<img src="{}" style="height:{}px;border-radius:6px;" />', src, height)
+    full = obj.image.url if obj.image else thumb
+    return format_html(
+        '<a href="{}" target="_blank">'
+        '<img src="{}" style="height:{}px;border-radius:6px;object-fit:cover;" /></a>',
+        full, thumb, height,
+    )
 
 admin.site.site_header = 'Carigara DEWS Administration'
 admin.site.site_title = 'Carigara DEWS'
@@ -46,10 +47,21 @@ class HazardImageInline(admin.TabularInline):
 
 @admin.register(Incident)
 class IncidentAdmin(admin.ModelAdmin):
-    list_display = ('type', 'municipality', 'severity', 'status', 'reported_at')
+    list_display = ('photo', 'type', 'municipality', 'severity', 'status', 'reported_at')
     list_filter = ('type', 'severity', 'status', 'municipality')
     search_fields = ('summary', 'barangay', 'reporter_name')
     inlines = [HazardImageInline]
+
+    @admin.display(description='Photo')
+    def photo(self, obj):
+        first = obj.images.first()
+        if not first:
+            return '—'
+        tag = _img_tag(first, 44)
+        count = obj.images.count()
+        if count > 1:
+            return format_html('{} <small>+{}</small>', tag, count - 1)
+        return tag
 
 
 @admin.register(HazardImage)
